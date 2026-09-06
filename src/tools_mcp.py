@@ -12,7 +12,14 @@ class MCPRuntimeBridge:
     using the Model Context Protocol (MCP).
     """
 
-    def __init__(self, command: str = "/usr/local/bin/uv", args: Optional[List[str]] = None):
+    def __init__(self, command: Optional[str] = None, args: Optional[List[str]] = None):
+        # Resolve 'uv' executable: environment override -> resolve from PATH -> fallback
+        if not command:
+            command = os.environ.get("UV_EXECUTABLE")
+            if not command:
+                import shutil
+                command = shutil.which("uv") or "/usr/local/bin/uv"
+
         # Default to the official mcp-clickhouse server using 'uv'
         self.server_params = StdioServerParameters(
             command=command,

@@ -1,5 +1,6 @@
 import pytest
 import asyncio
+import os
 from unittest.mock import MagicMock, AsyncMock, patch
 from src.agent_core import rightsready_tools
 from src.tools_mcp import MCPRuntimeBridge
@@ -91,6 +92,11 @@ async def test_mcp_runtime_live_integration():
     
     Verifies that the database tables in 'rightsready' can be listed through MCP.
     """
+    # SKIP if environment variables missing
+    for var in ["CLICKHOUSE_HOST", "CLICKHOUSE_USER", "CLICKHOUSE_PASSWORD", "CLICKHOUSE_DATABASE"]:
+        if not os.environ.get(var):
+            pytest.skip(f"Environment variable {var} not set")
+
     from src.tools_mcp import MCPRuntimeBridge
     
     bridge = MCPRuntimeBridge()

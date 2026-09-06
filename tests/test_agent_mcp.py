@@ -21,7 +21,7 @@ async def test_mcp_bridge_runtime_call():
     bridge.session = mock_session
     
     sql = "SELECT count() FROM assets"
-    result = await bridge.query(sql)
+    result = await bridge.run_query(sql)
     
     # Assertions
     assert result["content"] == ["Mocked ClickHouse Result"]
@@ -45,6 +45,7 @@ def test_agent_tool_registration():
     declarations = rightsready_tools.to_dict()["function_declarations"]
     tool_names = [d["name"] for d in declarations]
     
-    assert "run_rightsready_pipeline" in tool_names
-    assert "get_clearance_status" in tool_names
-    assert "get_clickhouse_data" in tool_names
+    assert "deterministic_validate" in tool_names
+    assert "deterministic_clearance" in tool_names
+    assert "deterministic_pipeline_execute" in tool_names
+    assert "agent_query_warehouse" in tool_names
