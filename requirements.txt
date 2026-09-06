@@ -1,0 +1,2 @@
+pycountry==26.2.16
+pytest==9.1.1
