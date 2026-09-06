@@ -1,0 +1,227 @@
+{
+  "metadata": {
+    "batch_id": "BATCH-2026-1049",
+    "source_system": "RightsTrack_Pro",
+    "source_file": "aurora_ep3_export.csv",
+    "uploaded_at": "2026-09-06T08:00:00Z",
+    "uploaded_by": "clearance.officer@fictionalstudio.com",
+    "schema_version": "1.0"
+  },
+  "production": {
+    "production_id": "PROD-001",
+    "title": "Project Aurora - Episode 3",
+    "production_type": "episode",
+    "release_date": "2026-10-01",
+    "requested_territories": [
+      "WORLDWIDE"
+    ],
+    "distribution_scope": "worldwide",
+    "status": "planned"
+  },
+  "assets": [
+    {
+      "asset_id": "AST-001",
+      "title": "Nebula Nights Synth Wave",
+      "asset_type": "music",
+      "rights_holder": "Galactic Beats Publishing",
+      "description": "Electronic synth background track",
+      "metadata": {
+        "source_file": "music_cue_sheet.xlsx",
+        "source_row": 12,
+        "source_system": "RightsTrack_Pro",
+        "created_at": "2026-08-15T10:30:00Z"
+      }
+    },
+    {
+      "asset_id": "AST-002",
+      "title": "1990s Tokyo Street Scene",
+      "asset_type": "archival_footage",
+      "rights_holder": "Retro World Archives LLC",
+      "description": "B-roll of Tokyo neon signs at night",
+      "metadata": {
+        "source_file": "archival_log.csv",
+        "source_row": 4,
+        "source_system": "RightsTrack_Pro",
+        "created_at": "2026-08-16T11:00:00Z"
+      }
+    },
+    {
+      "asset_id": "AST-003",
+      "title": "Jupiter Atmospheric Storm",
+      "asset_type": "photo",
+      "rights_holder": "Stellar Imagery Syndicate",
+      "description": "High-res telescope capture of Jupiter",
+      "metadata": {
+        "source_file": "photo_assets.json",
+        "source_row": 89,
+        "source_system": "RightsTrack_Pro",
+        "created_at": "2026-08-17T14:15:00Z"
+      }
+    },
+    {
+      "asset_id": "AST-004",
+      "title": "Aurora Station Matte Painting",
+      "asset_type": "artwork",
+      "rights_holder": "Jane Doe Concept Arts",
+      "description": "Digital matte painting of the space station exterior",
+      "metadata": {
+        "source_file": "vfx_tracker.csv",
+        "source_row": 102,
+        "source_system": "RightsTrack_Pro",
+        "created_at": "2026-08-18T09:45:00Z"
+      }
+    },
+    {
+      "asset_id": "AST-005",
+      "title": "Fictional Space Corp Logo",
+      "asset_type": "logo",
+      "rights_holder": "Aurora Productions Inc",
+      "description": "In-universe corporate branding logo",
+      "metadata": {
+        "source_file": "art_dept_log.csv",
+        "source_row": 1,
+        "source_system": "RightsTrack_Pro",
+        "created_at": "2026-08-19T16:20:00Z"
+      }
+    }
+  ],
+  "licenses": [
+    {
+      "license_id": "LIC-001",
+      "asset_id": "AST-001",
+      "license_type": "sync_and_master",
+      "valid_from": "2026-01-01",
+      "valid_until": "2030-12-31",
+      "permitted_territories": [
+        "US",
+        "CA"
+      ],
+      "permitted_usage": [
+        "all_media"
+      ],
+      "rights_holder": "Galactic Beats Publishing",
+      "contract_reference": "CON-2026-MU-01",
+      "license_status": "executed"
+    },
+    {
+      "license_id": "LIC-002",
+      "asset_id": "AST-002",
+      "license_type": "footage_clip",
+      "valid_from": "2025-09-20",
+      "valid_until": "2026-09-20",
+      "permitted_territories": [
+        "WORLDWIDE"
+      ],
+      "permitted_usage": [
+        "all_media"
+      ],
+      "rights_holder": "Retro World Archives LLC",
+      "contract_reference": "CON-2025-AR-44",
+      "license_status": "executed"
+    },
+    {
+      "license_id": "LIC-003",
+      "asset_id": "AST-003",
+      "license_type": "still_image",
+      "valid_from": "2026-01-01",
+      "valid_until": "2099-12-31",
+      "permitted_territories": [
+        "WORLDWIDE"
+      ],
+      "permitted_usage": [
+        "background",
+        "editorial"
+      ],
+      "rights_holder": "Stellar Imagery Syndicate",
+      "contract_reference": "CON-2026-PH-09",
+      "license_status": "executed"
+    },
+    {
+      "license_id": "LIC-004",
+      "asset_id": "AST-004",
+      "license_type": "work_for_hire",
+      "valid_from": "2026-05-01",
+      "valid_until": "2099-12-31",
+      "permitted_territories": [
+        "WORLDWIDE"
+      ],
+      "permitted_usage": [
+        "all_media",
+        "promotional"
+      ],
+      "rights_holder": "Jane Doe Concept Arts",
+      "contract_reference": "CON-2026-ART-01",
+      "license_status": "executed"
+    },
+    {
+      "license_id": "LIC-005",
+      "asset_id": "AST-005",
+      "license_type": "owned_intellectual_property",
+      "valid_from": "2026-01-01",
+      "valid_until": "2099-12-31",
+      "permitted_territories": [
+        "WORLDWIDE"
+      ],
+      "permitted_usage": [
+        "all_media",
+        "promotional",
+        "merchandise"
+      ],
+      "rights_holder": "Aurora Productions Inc",
+      "contract_reference": "CON-2026-INT-00",
+      "license_status": "executed"
+    }
+  ],
+  "asset_usage": [
+    {
+      "usage_id": "USG-001",
+      "production_id": "PROD-001",
+      "asset_id": "AST-001",
+      "scene_number": "14",
+      "usage_type": "background_music",
+      "duration_seconds": 45,
+      "prominence": "background",
+      "notes": "Plays on the jukebox in the cantina scene"
+    },
+    {
+      "usage_id": "USG-002",
+      "production_id": "PROD-001",
+      "asset_id": "AST-002",
+      "scene_number": "1",
+      "usage_type": "establishing_shot",
+      "duration_seconds": 5,
+      "prominence": "featured",
+      "notes": "Used in the opening montage"
+    },
+    {
+      "usage_id": "USG-003",
+      "production_id": "PROD-001",
+      "asset_id": "AST-003",
+      "scene_number": "N/A",
+      "usage_type": "promotional_trailer",
+      "duration_seconds": 12,
+      "prominence": "featured",
+      "notes": "Used as the main background plate for the Episode 3 promotional teaser trailer"
+    },
+    {
+      "usage_id": "USG-004",
+      "production_id": "PROD-001",
+      "asset_id": "AST-004",
+      "scene_number": "42",
+      "usage_type": "vfx_plate",
+      "duration_seconds": 15,
+      "prominence": "featured",
+      "notes": "Hero shot of the space station"
+    },
+    {
+      "usage_id": "USG-005",
+      "production_id": "PROD-001",
+      "asset_id": "AST-005",
+      "scene_number": "12",
+      "usage_type": "set_dressing",
+      "duration_seconds": 120,
+      "prominence": "background",
+      "notes": "Logo visible on character uniforms"
+    }
+  ]
+}
