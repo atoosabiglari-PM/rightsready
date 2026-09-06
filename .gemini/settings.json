@@ -1,0 +1,25 @@
+{
+  "mcpServers": {
+    "clickhouse": {
+      "command": "/usr/local/bin/uv",
+      "args": [
+        "run",
+        "--with",
+        "mcp-clickhouse",
+        "--python",
+        "3.12",
+        "mcp-clickhouse"
+      ],
+      "env": {
+        "CLICKHOUSE_HOST": "${CLICKHOUSE_HOST}",
+        "CLICKHOUSE_USER": "${CLICKHOUSE_USER}",
+        "CLICKHOUSE_PASSWORD": "${CLICKHOUSE_PASSWORD}",
+        "CLICKHOUSE_DATABASE": "${CLICKHOUSE_DATABASE}",
+        "CLICKHOUSE_MCP_SERVER_TRANSPORT": "stdio",
+        "CLICKHOUSE_SECURE": "true",
+        "CLICKHOUSE_VERIFY": "true",
+        "CLICKHOUSE_ALLOW_WRITE_ACCESS": "false"
+      }
+    }
+  }
+}
