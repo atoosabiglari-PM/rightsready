@@ -24,6 +24,8 @@ class TestAgentEngineDeployment(unittest.TestCase):
         self.assertEqual(env["CLICKHOUSE_VERIFY"], "true")
         self.assertEqual(env["CLICKHOUSE_ALLOW_WRITE_ACCESS"], "false")
         self.assertEqual(env["CLICKHOUSE_MCP_SERVER_TRANSPORT"], "stdio")
+        self.assertEqual(env["CLICKHOUSE_CONNECT_TIMEOUT"], "10")
+        self.assertEqual(env["CLICKHOUSE_MCP_QUERY_TIMEOUT"], "45")
 
         self.assertNotIn("MCP_CLICKHOUSE_EXECUTABLE", env)
         self.assertEqual(env["HTTPS_PROXY"], "http://10.10.1.2:3128")

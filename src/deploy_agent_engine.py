@@ -21,6 +21,8 @@ def get_deployment_config():
         "CLICKHOUSE_ALLOW_WRITE_ACCESS": "false",
         "CLICKHOUSE_MCP_SERVER_TRANSPORT": "stdio",
         "HTTPS_PROXY": "http://10.10.1.2:3128",
+        "CLICKHOUSE_CONNECT_TIMEOUT": "10",
+        "CLICKHOUSE_MCP_QUERY_TIMEOUT": "45",
         "CLICKHOUSE_PASSWORD": SecretRef(
             secret="rightsready-clickhouse-password",
             version="latest"
