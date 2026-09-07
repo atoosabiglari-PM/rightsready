@@ -2,7 +2,7 @@ import pytest
 import asyncio
 import os
 from unittest.mock import MagicMock, AsyncMock, patch
-from src.agent_core import rightsready_tools
+from src.agent_core import root_agent
 from src.tools_mcp import MCPRuntimeBridge
 from src.tools_deterministic import deterministic_clearance
 
@@ -37,10 +37,9 @@ def test_deterministic_clearance_blocked():
 
 def test_tool_registration():
     """
-    Verify all required tools are registered in the Vertex AI Tool object.
+    Verify all required tools are registered in the root_agent.
     """
-    declarations = rightsready_tools.to_dict()["function_declarations"]
-    names = [d["name"] for d in declarations]
+    names = [getattr(t, "name", getattr(t, "__name__", type(t).__name__)) for t in root_agent.tools]
     
     assert "deterministic_validate" in names
     assert "deterministic_clearance" in names

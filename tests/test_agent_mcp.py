@@ -35,15 +35,12 @@ async def test_mcp_bridge_runtime_call():
 
 def test_agent_tool_registration():
     """
-    Ensure the RightsReadyAgent correctly registers the required tools,
+    Ensure the ADK root_agent correctly registers the required tools,
     including the MCP-based query tool.
     """
-    # Note: We don't initialize the full GenerativeModel here to avoid 
-    # requiring a live Vertex AI environment during simple unit tests.
-    from src.agent_core import rightsready_tools
+    from src.agent_core import root_agent
     
-    declarations = rightsready_tools.to_dict()["function_declarations"]
-    tool_names = [d["name"] for d in declarations]
+    tool_names = [getattr(t, "name", getattr(t, "__name__", type(t).__name__)) for t in root_agent.tools]
     
     assert "deterministic_validate" in tool_names
     assert "deterministic_clearance" in tool_names
