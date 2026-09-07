@@ -13,24 +13,32 @@ class MCPRuntimeBridge:
     """
 
     def __init__(self, command: Optional[str] = None, args: Optional[List[str]] = None):
-        # Resolve 'uv' executable: environment override -> resolve from PATH -> fallback
+        import shutil
+        # Priority resolution for command and args
         if not command:
-            command = os.environ.get("UV_EXECUTABLE")
-            if not command:
-                import shutil
-                command = shutil.which("uv") or "/usr/local/bin/uv"
+            command = os.environ.get("MCP_CLICKHOUSE_EXECUTABLE")
+            if command:
+                args = args or []
+            else:
+                command = shutil.which("mcp-clickhouse")
+                if command:
+                    args = args or []
+                else:
+                    # UV fallback
+                    command = os.environ.get("UV_EXECUTABLE") or shutil.which("uv") or "/usr/local/bin/uv"
+                    args = args or [
+                        "run",
+                        "--with",
+                        "mcp-clickhouse",
+                        "--python",
+                        "3.12",
+                        "mcp-clickhouse"
+                    ]
 
-        # Default to the official mcp-clickhouse server using 'uv'
+        # Initialize server parameters preferring direct mcp-clickhouse over uv fallback
         self.server_params = StdioServerParameters(
             command=command,
-            args=args or [
-                "run",
-                "--with",
-                "mcp-clickhouse",
-                "--python",
-                "3.12",
-                "mcp-clickhouse"
-            ],
+            args=args,
             env=os.environ.copy()
         )
         self.session: Optional[ClientSession] = None

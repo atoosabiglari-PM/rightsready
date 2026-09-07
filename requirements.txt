@@ -5,3 +5,4 @@ clickhouse-connect==1.8.0
 google-cloud-aiplatform[agent_engines]>=1.160.0
 google-adk>=2.6.2
 mcp
+mcp-clickhouse==0.6.0
