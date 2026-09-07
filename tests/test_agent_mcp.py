@@ -15,7 +15,7 @@ async def test_mcp_bridge_runtime_call():
     mock_session = AsyncMock()
     mock_result = MagicMock()
     mock_result.content = [MagicMock(text="Mocked ClickHouse Result")]
-    mock_result.isError = False
+    mock_result.is_error = False
     mock_session.call_tool.return_value = mock_result
     
     bridge.session = mock_session

@@ -74,7 +74,7 @@ class MCPRuntimeBridge:
 
         return {
             "content": [c.text for c in result.content if hasattr(c, 'text')],
-            "is_error": result.isError
+            "is_error": result.is_error
         }
 
 async def agent_query_warehouse(sql: str) -> Dict[str, Any]:

@@ -62,7 +62,7 @@ async def test_mcp_bridge_protocol_layer():
     mock_session = AsyncMock()
     mock_result = MagicMock()
     mock_result.content = [MagicMock(text='[{"count": 5}]')]
-    mock_result.isError = False
+    mock_result.is_error = False
     mock_session.call_tool.return_value = mock_result
     
     bridge.session = mock_session
