@@ -13,8 +13,8 @@ class TestAgentEngineDeployment(unittest.TestCase):
         config = src.deploy_agent_engine.get_deployment_config()
         env = config["env_vars"]
 
-        self.assertEqual(env["GOOGLE_CLOUD_PROJECT"], "rightsready-507619")
-        self.assertEqual(env["GOOGLE_CLOUD_LOCATION"], "us-central1")
+        self.assertNotIn("GOOGLE_CLOUD_PROJECT", env)
+        self.assertNotIn("GOOGLE_CLOUD_LOCATION", env)
         self.assertEqual(env["GOOGLE_GENAI_USE_VERTEXAI"], "TRUE")
 
         self.assertEqual(env["CLICKHOUSE_HOST"], "sjhhz2rarh.us-central1.gcp.clickhouse.cloud")

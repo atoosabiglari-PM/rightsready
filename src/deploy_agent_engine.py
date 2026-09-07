@@ -13,8 +13,6 @@ def get_deployment_config():
 
     env_vars = {
         "GOOGLE_GENAI_USE_VERTEXAI": "TRUE",
-        "GOOGLE_CLOUD_PROJECT": "rightsready-507619",
-        "GOOGLE_CLOUD_LOCATION": "us-central1",
         "CLICKHOUSE_HOST": "sjhhz2rarh.us-central1.gcp.clickhouse.cloud",
         "CLICKHOUSE_USER": "default",
         "CLICKHOUSE_DATABASE": "rightsready",
