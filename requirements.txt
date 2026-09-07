@@ -2,7 +2,7 @@ pycountry==26.2.16
 pytest==9.1.1
 pytest-asyncio
 clickhouse-connect==1.8.0
-google-cloud-aiplatform[agent_engines]>=1.160.0
-google-adk>=2.6.2
+google-cloud-aiplatform[agent_engines]==1.163.0
+google-adk==2.6.2
 mcp
 mcp-clickhouse==0.6.0

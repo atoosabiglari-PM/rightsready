@@ -103,5 +103,18 @@ class TestAgentEngineDeployment(unittest.TestCase):
             mock_adk_app.assert_not_called()
             mock_create.assert_not_called()
 
+    def test_requirements_pinning(self):
+        # F: Verify strict requirement pinning
+        with open("requirements.txt", "r") as f:
+            lines = [line.strip() for line in f.readlines()]
+
+        self.assertIn("google-cloud-aiplatform[agent_engines]==1.163.0", lines)
+        self.assertIn("google-adk==2.6.2", lines)
+
+        # Verify rejection of looser bounds
+        self.assertNotIn("google-cloud-aiplatform[agent_engines]>=1.160.0", lines)
+        self.assertNotIn("google-adk>=2.6.2", lines)
+
+
 if __name__ == "__main__":
     unittest.main()
