@@ -36,7 +36,7 @@ async def test_mcp_bridge_runtime_call():
 
 
 def test_mcp_command_resolution():
-    """Verify priority: ENV > PATH > UV."""
+    """Verify priority: ENV > PATH > Module > UV."""
     # 1. Test ENV override
     with patch.dict(os.environ, {"MCP_CLICKHOUSE_EXECUTABLE": "/custom/path/bin"}):
         bridge = MCPRuntimeBridge()
@@ -50,9 +50,19 @@ def test_mcp_command_resolution():
             assert bridge.server_params.command == "/bin/mcp-clickhouse"
             assert bridge.server_params.args == []
 
-    # 3. Test UV fallback
+    # 3. Test Module fallback
     with patch.dict(os.environ, {}, clear=True):
-        with patch("shutil.which", side_effect=lambda cmd: "/bin/uv" if cmd == "uv" else None):
+        with patch("shutil.which", return_value=None), \
+             patch("importlib.util.find_spec", return_value=True), \
+             patch("sys.executable", "/usr/bin/python3"):
+            bridge = MCPRuntimeBridge()
+            assert bridge.server_params.command == "/usr/bin/python3"
+            assert bridge.server_params.args == ["-m", "mcp_clickhouse.main"]
+
+    # 4. Test UV fallback
+    with patch.dict(os.environ, {}, clear=True):
+        with patch("shutil.which", side_effect=lambda cmd: "/bin/uv" if cmd == "uv" else None), \
+             patch("importlib.util.find_spec", return_value=False):
             bridge = MCPRuntimeBridge()
             assert bridge.server_params.command == "/bin/uv"
             assert bridge.server_params.args == ["run", "--with", "mcp-clickhouse", "--python", "3.12", "mcp-clickhouse"]

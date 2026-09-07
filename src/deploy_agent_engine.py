@@ -20,7 +20,6 @@ def get_deployment_config():
         "CLICKHOUSE_VERIFY": "true",
         "CLICKHOUSE_ALLOW_WRITE_ACCESS": "false",
         "CLICKHOUSE_MCP_SERVER_TRANSPORT": "stdio",
-        "MCP_CLICKHOUSE_EXECUTABLE": "mcp-clickhouse",
         "HTTPS_PROXY": "http://10.10.1.2:3128",
         "CLICKHOUSE_PASSWORD": SecretRef(
             secret="rightsready-clickhouse-password",

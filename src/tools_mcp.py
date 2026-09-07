@@ -14,26 +14,35 @@ class MCPRuntimeBridge:
 
     def __init__(self, command: Optional[str] = None, args: Optional[List[str]] = None):
         import shutil
+        import sys
+        import importlib.util
+
         # Priority resolution for command and args
         if not command:
             command = os.environ.get("MCP_CLICKHOUSE_EXECUTABLE")
             if command:
                 args = args or []
             else:
+                # 1. Try PATH
                 command = shutil.which("mcp-clickhouse")
                 if command:
                     args = args or []
                 else:
-                    # UV fallback
-                    command = os.environ.get("UV_EXECUTABLE") or shutil.which("uv") or "/usr/local/bin/uv"
-                    args = args or [
-                        "run",
-                        "--with",
-                        "mcp-clickhouse",
-                        "--python",
-                        "3.12",
-                        "mcp-clickhouse"
-                    ]
+                    # 2. Try installed python module
+                    if importlib.util.find_spec("mcp_clickhouse"):
+                        command = sys.executable
+                        args = args or ["-m", "mcp_clickhouse.main"]
+                    else:
+                        # 3. UV fallback
+                        command = os.environ.get("UV_EXECUTABLE") or shutil.which("uv") or "/usr/local/bin/uv"
+                        args = args or [
+                            "run",
+                            "--with",
+                            "mcp-clickhouse",
+                            "--python",
+                            "3.12",
+                            "mcp-clickhouse"
+                        ]
 
         # Initialize server parameters preferring direct mcp-clickhouse over uv fallback
         self.server_params = StdioServerParameters(
