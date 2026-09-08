@@ -1,3 +1,32 @@
+function formatGeminiText(text) {
+    const container = document.createElement('div');
+    const lines = text.split('\n');
+    lines.forEach(line => {
+        const trimmedLine = line.trim();
+        if (!trimmedLine) return;
+
+        const p = document.createElement('p');
+        // Helper to remove ** and `
+        const clean = (s) => s.replace(/\*\*/g, '').replace(/`/g, '');
+        // Bold heading: **Heading:**
+        if (trimmedLine.startsWith('**') && trimmedLine.includes(':**')) {
+            const parts = trimmedLine.split(':**');
+            const bold = document.createElement('strong');
+            bold.textContent = clean(parts[0]) + ':';
+            p.appendChild(bold);
+            p.appendChild(document.createTextNode(clean(parts[1])));
+        } else if (trimmedLine.startsWith('* ') || trimmedLine.startsWith('- ')) {
+            // Bullet
+            p.textContent = '• ' + clean(trimmedLine.substring(2));
+        } else {
+            // Plain text
+            p.textContent = clean(trimmedLine);
+        }
+        container.appendChild(p);
+    });
+    return container;
+}
+
 document.getElementById('analyze-btn').addEventListener('click', async () => {
     const container = document.getElementById('results-container');
     const btn = document.getElementById('analyze-btn');
@@ -31,26 +60,33 @@ document.getElementById('analyze-btn').addEventListener('click', async () => {
         govCue.style.textAlign = 'center';
         govCue.style.fontWeight = 'bold';
         govCue.style.marginBottom = '10px';
-        govCue.textContent = 'Authoritative deterministic result';
+        govCue.style.fontSize = '0.8em';
+        govCue.style.color = '#888';
+        govCue.textContent = 'AUTHORITATIVE DETERMINISTIC RESULT';
         container.appendChild(govCue);
 
         // Summary...
         const summary = document.createElement('div');
         summary.className = 'summary-metrics';
 
-        const totalCard = document.createElement('div');
-        totalCard.className = 'metric-card';
-        totalCard.textContent = `Total: ${data.summary.total_usages}`;
+        const createMetricCard = (label, value) => {
+            const card = document.createElement('div');
+            card.className = 'metric-card';
+            const valDiv = document.createElement('div');
+            valDiv.style.fontSize = '1.5em';
+            valDiv.style.fontWeight = 'bold';
+            valDiv.textContent = value;
+            const labelDiv = document.createElement('div');
+            labelDiv.textContent = label;
+            card.append(valDiv, labelDiv);
+            return card;
+        }
 
-        const clearedCard = document.createElement('div');
-        clearedCard.className = 'metric-card';
-        clearedCard.textContent = `Cleared: ${data.summary.cleared}`;
-
-        const blockedCard = document.createElement('div');
-        blockedCard.className = 'metric-card';
-        blockedCard.textContent = `Blocked: ${data.summary.not_cleared}`;
-
-        summary.append(totalCard, clearedCard, blockedCard);
+        summary.append(
+            createMetricCard('Total', data.summary.total_usages),
+            createMetricCard('Cleared', data.summary.cleared),
+            createMetricCard('Blocked', data.summary.not_cleared)
+        );
         container.appendChild(summary);
 
         // Decisions...
@@ -60,7 +96,8 @@ document.getElementById('analyze-btn').addEventListener('click', async () => {
             const item = document.createElement('div');
             item.className = `decision-item ${d.status === 'CLEARED' ? 'cleared' : 'not-cleared'}`;
 
-            const title = document.createElement('strong');
+            const title = document.createElement('div');
+            title.style.fontWeight = 'bold';
             title.textContent = `${d.asset_id} - ${d.asset_title || 'Unknown'}`;
 
             const details = document.createElement('div');
@@ -71,6 +108,7 @@ document.getElementById('analyze-btn').addEventListener('click', async () => {
             if (d.status === 'NOT_CLEARED') {
                 const reason = document.createElement('div');
                 reason.style.fontWeight = 'bold';
+                reason.style.marginTop = '5px';
                 reason.textContent = `Reason: ${d.reason_codes.join(', ')}`;
                 item.appendChild(reason);
             }
@@ -82,10 +120,10 @@ document.getElementById('analyze-btn').addEventListener('click', async () => {
         // Explanation...
         const explanation = document.createElement('div');
         explanation.style.marginTop = '20px';
+        explanation.className = 'explanation-card';
         const h3 = document.createElement('h3');
         h3.textContent = "Gemini explanation";
-        const answerDiv = document.createElement('div');
-        answerDiv.textContent = data.answer;
+        const answerDiv = formatGeminiText(data.answer);
         explanation.append(h3, answerDiv);
         container.appendChild(explanation);
 
@@ -156,24 +194,30 @@ document.getElementById('ask-btn').addEventListener('click', async () => {
             // Handle data content (columns/rows rendering)...
             const dataDiv = document.createElement('div');
             dataDiv.className = 'evidence-data';
+            dataDiv.style.marginTop = '10px';
 
             if (data.warehouse_evidence.rows.length === 1 && data.warehouse_evidence.rows[0].length === 1) {
                 // Scalar result
                 const label = document.createElement('div');
-                label.style.fontWeight = 'bold';
+                label.style.color = '#aaa';
                 label.textContent = data.warehouse_evidence.columns[0];
                 const value = document.createElement('div');
-                value.style.fontSize = '1.5em';
+                value.style.fontSize = '1.8em';
+                value.style.fontWeight = 'bold';
                 value.textContent = data.warehouse_evidence.rows[0][0];
                 dataDiv.append(label, value);
             } else {
                 // Tabular result
                 const table = document.createElement('table');
                 table.style.width = '100%';
+                table.style.borderCollapse = 'collapse';
                 const thead = document.createElement('thead');
                 const headerRow = document.createElement('tr');
                 data.warehouse_evidence.columns.forEach(col => {
                     const th = document.createElement('th');
+                    th.style.borderBottom = '1px solid #444';
+                    th.style.textAlign = 'left';
+                    th.style.padding = '8px';
                     th.textContent = col;
                     headerRow.appendChild(th);
                 });
@@ -185,6 +229,8 @@ document.getElementById('ask-btn').addEventListener('click', async () => {
                     const tr = document.createElement('tr');
                     row.forEach(cell => {
                         const td = document.createElement('td');
+                        td.style.borderBottom = '1px solid #333';
+                        td.style.padding = '8px';
                         td.textContent = cell;
                         tr.appendChild(td);
                     });
@@ -205,10 +251,10 @@ document.getElementById('ask-btn').addEventListener('click', async () => {
         // Gemini explanation
         const explanation = document.createElement('div');
         explanation.style.marginTop = '20px';
+        explanation.className = 'explanation-card';
         const h3 = document.createElement('h3');
         h3.textContent = "Gemini explanation";
-        const answerDiv = document.createElement('div');
-        answerDiv.textContent = data.answer;
+        const answerDiv = formatGeminiText(data.answer);
         explanation.append(h3, answerDiv);
         container.appendChild(explanation);
 

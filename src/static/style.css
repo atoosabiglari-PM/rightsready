@@ -4,17 +4,20 @@ body {
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     margin: 0;
     padding: 20px;
+    max-width: 900px; /* Responsive container */
+    margin: 0 auto;
 }
 
 header {
     border-bottom: 1px solid #333;
     padding-bottom: 20px;
     margin-bottom: 20px;
+    text-align: center;
 }
 
-h1 { color: #fff; margin: 0; }
-.descriptor { color: #aaa; margin: 5px 0; }
-.slogan { color: #66d9ef; font-style: italic; }
+h1 { color: #fff; margin: 0; font-size: 2.5em; }
+.descriptor { color: #aaa; margin: 5px 0; font-size: 1.1em; }
+.slogan { color: #66d9ef; font-size: 0.9em; font-style: normal; letter-spacing: 1px; text-transform: uppercase; }
 
 .card {
     background-color: #1a1a1a;
@@ -30,16 +33,21 @@ button {
     border: 1px solid #555;
     padding: 10px 20px;
     cursor: pointer;
+    border-radius: 2px;
 }
 
+button:hover { background-color: #444; }
 button:disabled { opacity: 0.5; cursor: not-allowed; }
 
 input {
-    width: 300px;
+    width: 100%; /* Responsive */
+    max-width: 400px;
     padding: 10px;
     background: #111;
     border: 1px solid #333;
     color: #fff;
+    box-sizing: border-box;
+    margin-bottom: 10px;
 }
 
 .neutral { border-left: 4px solid #555; }
@@ -49,16 +57,18 @@ input {
 
 /* Clearance Results UI */
 .status-banner {
-    font-size: 1.5em;
+    font-size: 1.8em;
     font-weight: bold;
     padding: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     text-align: center;
+    color: #fff;
 }
 .summary-metrics {
     display: flex;
-    gap: 20px;
+    gap: 15px;
     margin-bottom: 20px;
+    flex-wrap: wrap;
 }
 .metric-card {
     background: #222;
@@ -66,6 +76,7 @@ input {
     border-radius: 4px;
     flex: 1;
     text-align: center;
+    min-width: 120px;
 }
 .decision-list {
     display: flex;
@@ -74,17 +85,18 @@ input {
 }
 .decision-item {
     background: #222;
-    padding: 10px;
+    padding: 15px;
     border-radius: 4px;
     border-left: 4px solid #555;
 }
 .decision-item.cleared { border-left-color: #2ecc71; }
 .decision-item.not-cleared { border-left-color: #e74c3c; }
-.governance-cue {
-    font-size: 0.8em;
-    color: #888;
-    margin-top: 20px;
-    font-style: italic;
+
+.explanation-card {
+    background: #222;
+    padding: 20px;
+    border-radius: 4px;
+    border: 1px solid #333;
 }
 
 .evidence-panel {
@@ -97,10 +109,12 @@ input {
 
 .source-badge {
     background: #333;
-    padding: 2px 6px;
+    padding: 2px 8px;
     border-radius: 3px;
     font-size: 0.8em;
     color: #fff;
+    display: inline-block;
+    margin-top: 5px;
 }
 
 .validation-message {
@@ -127,7 +141,10 @@ input {
     margin-bottom: 5px;
 }
 
-.error-message {
-    font-size: 1em;
-    color: #e0e0e0;
+.governance-cue {
+    font-size: 0.8em;
+    color: #888;
+    margin-top: 10px;
+    text-align: center;
+    letter-spacing: 0.5px;
 }
