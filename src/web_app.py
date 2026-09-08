@@ -35,10 +35,10 @@ async def ask(request: AskRequest):
 
     try:
         client = get_agent_client()
-        answer = await client.async_stream_query(question)
-        return {"answer": answer}
+        result = await client.ask_with_evidence(question)
+        return result
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Agent Engine invocation failed.")
+        raise HTTPException(status_code=500, detail="RightsReady could not complete this query.")
 
 @app.post("/api/analyze")
 async def analyze():
