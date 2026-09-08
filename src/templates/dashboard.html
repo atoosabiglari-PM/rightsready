@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RightsReady - AI Rights Clearance Control Center</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>RightsReady</h1>
+        <p class="descriptor">AI Rights Clearance Control Center</p>
+        <p class="slogan">AI ORCHESTRATES. RULES GOVERN. DATA PROVES.</p>
+    </header>
+
+    <main>
+        <section id="project-summary">
+            <h2>Project Summary</h2>
+            <div class="card">
+                <h3>Project Aurora – Episode 3</h3>
+                <p><strong>Production ID:</strong> PROD-001</p>
+                <p><strong>Release Date:</strong> 2026-10-01</p>
+                <p><strong>Territory:</strong> WORLDWIDE</p>
+                <button id="analyze-btn">Analyze Rights</button>
+            </div>
+        </section>
+
+        <section id="clearance-results">
+            <h2>Clearance Results</h2>
+            <div id="results-container" class="card neutral">
+                <p>Run rights analysis to see the authoritative clearance result.</p>
+            </div>
+        </section>
+
+        <section id="ask-rightsready">
+            <h2>Ask RightsReady</h2>
+            <div class="card">
+                <input type="text" id="question" placeholder="Ask a question..." value="How many assets are currently in the rights warehouse?">
+                <button id="ask-btn">Ask RightsReady</button>
+                <div id="answer-container"></div>
+            </div>
+        </section>
+
+        <section id="architecture">
+            <p><em>Gemini orchestrates • Deterministic tools decide • ClickHouse queried via MCP</em></p>
+        </section>
+    </main>
+    <script src="/static/app.js"></script>
+</body>
+</html>
