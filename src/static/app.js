@@ -1,8 +1,15 @@
 document.getElementById('analyze-btn').addEventListener('click', async () => {
     const container = document.getElementById('results-container');
     const btn = document.getElementById('analyze-btn');
+    // Loading State
     container.className = 'card loading';
-    container.textContent = 'Running governed rights analysis…';
+    container.replaceChildren();
+    const loadingText = document.createElement('p');
+    loadingText.textContent = 'Running governed rights analysis…';
+    const subLoadingText = document.createElement('p');
+    subLoadingText.style.fontSize = '0.9em';
+    subLoadingText.textContent = 'Gemini is orchestrating. Deterministic rules remain authoritative.';
+    container.append(loadingText, subLoadingText);
     btn.disabled = true;
 
     try {
@@ -11,7 +18,7 @@ document.getElementById('analyze-btn').addEventListener('click', async () => {
         const data = await response.json();
 
         container.className = `card ${data.overall_status === 'CLEARED' ? 'cleared' : 'not-cleared'}`;
-        container.replaceChildren(); // Safely clear
+        container.replaceChildren();
 
         // Overall Status
         const statusBanner = document.createElement('div');
@@ -19,7 +26,15 @@ document.getElementById('analyze-btn').addEventListener('click', async () => {
         statusBanner.textContent = data.overall_status;
         container.appendChild(statusBanner);
 
-        // Summary
+        // Governance Designation
+        const govCue = document.createElement('div');
+        govCue.style.textAlign = 'center';
+        govCue.style.fontWeight = 'bold';
+        govCue.style.marginBottom = '10px';
+        govCue.textContent = 'Authoritative deterministic result';
+        container.appendChild(govCue);
+
+        // Summary...
         const summary = document.createElement('div');
         summary.className = 'summary-metrics';
 
@@ -38,7 +53,7 @@ document.getElementById('analyze-btn').addEventListener('click', async () => {
         summary.append(totalCard, clearedCard, blockedCard);
         container.appendChild(summary);
 
-        // Decisions
+        // Decisions...
         const list = document.createElement('div');
         list.className = 'decision-list';
         data.decisions.forEach(d => {
@@ -64,12 +79,7 @@ document.getElementById('analyze-btn').addEventListener('click', async () => {
         });
         container.appendChild(list);
 
-        // Governance Cue & Answer
-        const cue = document.createElement('div');
-        cue.className = 'governance-cue';
-        cue.textContent = 'Authoritative result • Deterministic clearance engine';
-        container.appendChild(cue);
-
+        // Explanation...
         const explanation = document.createElement('div');
         explanation.style.marginTop = '20px';
         const h3 = document.createElement('h3');
@@ -81,7 +91,14 @@ document.getElementById('analyze-btn').addEventListener('click', async () => {
 
     } catch (e) {
         container.className = 'card error';
-        container.textContent = `Rights analysis could not be completed.`;
+        container.replaceChildren();
+        const heading = document.createElement('div');
+        heading.className = 'error-heading';
+        heading.textContent = 'Analysis unavailable';
+        const msg = document.createElement('div');
+        msg.className = 'error-message';
+        msg.textContent = 'RightsReady could not complete the governed rights analysis. Please try again.';
+        container.append(heading, msg);
     } finally {
         btn.disabled = false;
     }
@@ -89,15 +106,26 @@ document.getElementById('analyze-btn').addEventListener('click', async () => {
 
 document.getElementById('ask-btn').addEventListener('click', async () => {
     const container = document.getElementById('answer-container');
-    const question = document.getElementById('question').value;
+    const questionInput = document.getElementById('question');
+    const question = questionInput.value;
     const btn = document.getElementById('ask-btn');
+    const validationMsg = document.getElementById('validation-msg');
 
+    // Validation
     if (!question.trim()) {
-        alert('Please enter a question.');
+        validationMsg.style.display = 'block';
         return;
     }
+    validationMsg.style.display = 'none';
 
-    container.textContent = 'Querying governed rights warehouse…';
+    // Loading State
+    container.replaceChildren();
+    const loadingText = document.createElement('p');
+    loadingText.textContent = 'Querying governed rights warehouse…';
+    const subLoadingText = document.createElement('p');
+    subLoadingText.style.fontSize = '0.9em';
+    subLoadingText.textContent = 'Gemini may query ClickHouse through governed MCP.';
+    container.append(loadingText, subLoadingText);
     btn.disabled = true;
 
     try {
@@ -125,7 +153,7 @@ document.getElementById('ask-btn').addEventListener('click', async () => {
             badge.textContent = 'ClickHouse • MCP';
             panel.appendChild(badge);
 
-            // Handle data content (columns/rows rendering)
+            // Handle data content (columns/rows rendering)...
             const dataDiv = document.createElement('div');
             dataDiv.className = 'evidence-data';
 
@@ -167,11 +195,6 @@ document.getElementById('ask-btn').addEventListener('click', async () => {
             }
             panel.appendChild(dataDiv);
             container.appendChild(panel);
-
-            const cue = document.createElement('div');
-            cue.className = 'governance-cue';
-            cue.textContent = 'Live data • ClickHouse queried through governed MCP';
-            container.appendChild(cue);
         }
 
         // Gemini explanation
@@ -185,7 +208,14 @@ document.getElementById('ask-btn').addEventListener('click', async () => {
         container.appendChild(explanation);
 
     } catch (e) {
-        container.textContent = 'RightsReady could not complete this query.';
+        container.replaceChildren();
+        const heading = document.createElement('div');
+        heading.className = 'error-heading';
+        heading.textContent = 'Warehouse query unavailable';
+        const msg = document.createElement('div');
+        msg.className = 'error-message';
+        msg.textContent = 'RightsReady could not complete this query. Please try again.';
+        container.append(heading, msg);
     } finally {
         btn.disabled = false;
     }

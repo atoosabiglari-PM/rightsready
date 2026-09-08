@@ -103,9 +103,31 @@ input {
     color: #fff;
 }
 
-.evidence-data {
-    margin-top: 10px;
-    font-family: monospace;
+.validation-message {
+    color: #e74c3c;
     font-size: 0.9em;
-    white-space: pre-wrap;
+    margin-top: 5px;
+    display: none;
+}
+
+.trust-cue {
+    font-size: 0.85em;
+    color: #aaa;
+    border-top: 1px solid #333;
+    padding-top: 10px;
+    margin-top: 20px;
+    font-style: italic;
+    text-align: center;
+}
+
+.error-heading {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #e74c3c;
+    margin-bottom: 5px;
+}
+
+.error-message {
+    font-size: 1em;
+    color: #e0e0e0;
 }

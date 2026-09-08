@@ -27,7 +27,7 @@
 
         <section id="clearance-results">
             <h2>Clearance Results</h2>
-            <div id="results-container" class="card neutral">
+            <div id="results-container" class="card neutral" aria-live="polite">
                 <p>Run rights analysis to see the authoritative clearance result.</p>
             </div>
         </section>
@@ -37,13 +37,14 @@
             <p class="descriptor">Ask Gemini questions backed by ClickHouse through MCP</p>
             <div class="card">
                 <input type="text" id="question" placeholder="Ask a question..." value="How many assets are currently in the rights warehouse?">
+                <div id="validation-msg" class="validation-message">Enter a question before querying RightsReady.</div>
                 <button id="ask-btn">Ask RightsReady</button>
-                <div id="answer-container"></div>
+                <div id="answer-container" aria-live="polite"></div>
             </div>
         </section>
 
-        <section id="architecture">
-            <p><em>Gemini orchestrates • Deterministic tools decide • ClickHouse queried via MCP</em></p>
+        <section id="governance-trust-cue" class="trust-cue">
+            <p>AI orchestrates • Deterministic rules decide • ClickHouse data proves</p>
         </section>
     </main>
     <script src="/static/app.js"></script>
