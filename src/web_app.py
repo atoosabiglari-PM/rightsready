@@ -45,7 +45,26 @@ async def analyze():
     prompt = "Use the deterministic_clearance tool on data/fixtures/project_aurora_valid.json. Do not make the clearance decision yourself. Report the authoritative clearance result."
     try:
         client = get_agent_client()
-        answer = await client.async_stream_query(prompt)
-        return {"answer": answer}
+        result = await client.analyze_clearance(prompt)
+
+        clearance_result = result["clearance_result"]
+
+        # Validate authoritative payload
+        if not (
+            isinstance(clearance_result, dict) and
+            isinstance(clearance_result.get("status"), str) and clearance_result.get("status") and
+            isinstance(clearance_result.get("summary"), dict) and
+            all(isinstance(clearance_result["summary"].get(k), int) for k in ["total_usages", "cleared", "not_cleared"]) and
+            isinstance(clearance_result.get("decisions"), list)
+        ):
+            raise ValueError("Malformed authoritative clearance data")
+
+        return {
+            "answer": result["answer"],
+            "overall_status": clearance_result.get("status"),
+            "summary": clearance_result.get("summary"),
+            "decisions": clearance_result.get("decisions"),
+            "authoritative_source": "deterministic_clearance"
+        }
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Agent Engine invocation failed.")
+        raise HTTPException(status_code=500, detail="Rights analysis could not be completed.")

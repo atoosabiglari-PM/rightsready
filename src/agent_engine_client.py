@@ -1,6 +1,7 @@
 import os
 import uuid
 import vertexai
+from typing import Any, Dict
 from vertexai import agent_engines
 
 class AgentEngineClient:
@@ -15,13 +16,15 @@ class AgentEngineClient:
         vertexai.init(project=self.project, location=self.location)
         self.agent = agent_engines.get(self.resource_name)
 
-    async def async_stream_query(self, prompt: str) -> str:
+    async def analyze_clearance(self, prompt: str) -> Dict[str, Any]:
         """
-        Invokes the agent and collects the final response.
+        Invokes the agent, collects the final response and the authoritative
+        deterministic_clearance tool response.
         """
         user_id = str(uuid.uuid4())
         final_text = None
-        
+        clearance_result = None
+
         async for event in self.agent.async_stream_query(
             message=prompt,
             user_id=user_id
@@ -33,13 +36,53 @@ class AgentEngineClient:
                 for part in content["parts"]:
                     if "text" in part:
                         event_text += part["text"]
-                
+
                 if event_text:
                     final_text = event_text
-        
+
+            # Extract deterministic_clearance function response
+            content = event.get("content", {})
+            for part in content.get("parts", []):
+                function_response = part.get("function_response")
+                if function_response and function_response.get("name") == "deterministic_clearance":
+                    clearance_result = function_response.get("response")
+
         if final_text is None:
             raise Exception("Agent Engine failed to return a valid response.")
-            
+
+        if clearance_result is None:
+            raise Exception("Authoritative deterministic_clearance result not found.")
+
+        return {
+            "answer": final_text,
+            "clearance_result": clearance_result
+        }
+
+    async def async_stream_query(self, prompt: str) -> str:
+        """
+        Invokes the agent and collects the final response.
+        """
+        user_id = str(uuid.uuid4())
+        final_text = None
+
+        async for event in self.agent.async_stream_query(
+            message=prompt,
+            user_id=user_id
+        ):
+            # Extract text from model response events
+            content = event.get("content", {})
+            if content.get("role") == "model" and "parts" in content:
+                event_text = ""
+                for part in content["parts"]:
+                    if "text" in part:
+                        event_text += part["text"]
+
+                if event_text:
+                    final_text = event_text
+
+        if final_text is None:
+            raise Exception("Agent Engine failed to return a valid response.")
+
         return final_text
 
 # Singleton instance

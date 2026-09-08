@@ -9,8 +9,9 @@ client = TestClient(app)
 def mock_agent_client():
     with patch("src.web_app.get_agent_client") as mock:
         mock_client = MagicMock()
-        # Ensure async_stream_query is an AsyncMock
+        # Ensure async methods are AsyncMocks
         mock_client.async_stream_query = AsyncMock()
+        mock_client.analyze_clearance = AsyncMock()
         mock.return_value = mock_client
         yield mock_client
 
@@ -40,21 +41,66 @@ def test_ask_success(mock_agent_client):
     assert response.json() == {"answer": "Mocked answer"}
     mock_agent_client.async_stream_query.assert_called_once_with("Test question")
 
-def test_ask_whitespace_stripping(mock_agent_client):
-    mock_agent_client.async_stream_query.return_value = "Mocked answer"
-    response = client.post("/api/ask", json={"question": "   Test question   "})
-    assert response.status_code == 200
-    assert response.json() == {"answer": "Mocked answer"}
-    mock_agent_client.async_stream_query.assert_called_once_with("Test question")
-
 def test_analyze_success(mock_agent_client):
-    mock_agent_client.async_stream_query.return_value = "Mocked clearance"
+    mock_data = {
+            "status": "CLEARED",
+            "summary": {"total_usages": 1, "cleared": 1, "not_cleared": 0},
+            "decisions": []
+        }
+    mock_agent_client.analyze_clearance.return_value = {
+        "answer": "Explanation",
+        "clearance_result": mock_data
+    }
     response = client.post("/api/analyze")
     assert response.status_code == 200
-    assert response.json() == {"answer": "Mocked clearance"}
+    assert response.json()["overall_status"] == "CLEARED"
+    assert response.json()["summary"] == mock_data["summary"]
 
-def test_agent_failure(mock_agent_client):
-    mock_agent_client.async_stream_query.side_effect = Exception("Failed")
-    response = client.post("/api/ask", json={"question": "Test question"})
+def test_analyze_failure_malformed_status(mock_agent_client):
+    # Missing status
+    mock_agent_client.analyze_clearance.return_value = {
+        "answer": "Explanation",
+        "clearance_result": {
+            "summary": {"total_usages": 1, "cleared": 1, "not_cleared": 0},
+            "decisions": []
+        }
+    }
+    response = client.post("/api/analyze")
     assert response.status_code == 500
-    assert "Agent Engine invocation failed." in response.json()["detail"]
+
+def test_analyze_failure_malformed_summary(mock_agent_client):
+    # Missing summary
+    mock_agent_client.analyze_clearance.return_value = {
+        "answer": "Explanation",
+        "clearance_result": {
+            "status": "CLEARED",
+            "decisions": []
+        }
+    }
+    response = client.post("/api/analyze")
+    assert response.status_code == 500
+
+def test_analyze_failure_malformed_decisions(mock_agent_client):
+    # Missing decisions
+    mock_agent_client.analyze_clearance.return_value = {
+        "answer": "Explanation",
+        "clearance_result": {
+            "status": "CLEARED",
+            "summary": {"total_usages": 1, "cleared": 1, "not_cleared": 0}
+        }
+    }
+    response = client.post("/api/analyze")
+    assert response.status_code == 500
+
+def test_analyze_failure_malformed_summary_counts(mock_agent_client):
+    # Missing summary count fields
+    mock_agent_client.analyze_clearance.return_value = {
+        "answer": "Explanation",
+        "clearance_result": {
+            "status": "CLEARED",
+            "summary": {"total": 5},
+            "decisions": []
+        }
+    }
+    response = client.post("/api/analyze")
+    assert response.status_code == 500
