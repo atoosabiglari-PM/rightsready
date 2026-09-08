@@ -195,6 +195,11 @@ document.getElementById('ask-btn').addEventListener('click', async () => {
             }
             panel.appendChild(dataDiv);
             container.appendChild(panel);
+
+            const govCue = document.createElement('div');
+            govCue.className = 'governance-cue';
+            govCue.textContent = 'Live data • ClickHouse queried through governed MCP';
+            container.appendChild(govCue);
         }
 
         // Gemini explanation
